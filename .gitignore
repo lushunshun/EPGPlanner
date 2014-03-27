@@ -4,3 +4,17 @@
 *.jar
 *.war
 *.ear
+
+# Eclipse files #
+/bin
+/lib
+.classpath
+/.metadata
+.settings
+.project
+
+# Idea IDE #
+/.idea
+
+/shelf
+*.iml
