@@ -1,11 +1,14 @@
 package epgPlanner;
 
-import epgPlanner.Recording.Rating;
-import epgPlanner.Recording.Status;
+import java.util.GregorianCalendar;
+
 import junit.framework.Assert;
+
 import org.junit.Test;
 
-import java.util.GregorianCalendar;
+import epgPlanner.Recording.Rating;
+import epgPlanner.Recording.Status;
+import epgPlanner.synopsis.ManualRecordingSynopsisProducer;
 
 public class TestSynopsisStringForManualRecordings {
 
@@ -18,7 +21,7 @@ public class TestSynopsisStringForManualRecordings {
 
 		String expectedSecondPageOfSynopsis = "To be recorded\n17/10 4:15PM - 5:30PM, Once";
 
-		int recurrence = ManualRecording.Recurrence.ONCE;
+		ManualRecording.Recurrence recurrence = ManualRecording.Recurrence.ONCE;
 		createAndVerifyManualRecordingWithSpecifiedRecurrence(expectedSecondPageOfSynopsis, recurrence);
 	}
 
@@ -26,7 +29,7 @@ public class TestSynopsisStringForManualRecordings {
 	public void TestSynopsisForManualRecordingToBeRecordedDaily() throws Exception {
 		String expectedSecondPageOfSynopsis = "To be recorded\n17/10 4:15PM - 5:30PM, Daily";
 
-		int recurrence = ManualRecording.Recurrence.DAILY;
+		ManualRecording.Recurrence recurrence = ManualRecording.Recurrence.DAILY;
 		createAndVerifyManualRecordingWithSpecifiedRecurrence(expectedSecondPageOfSynopsis, recurrence);
 	}
 
@@ -34,7 +37,7 @@ public class TestSynopsisStringForManualRecordings {
 	public void TestSynopsisForManualRecordingToBeRecordedWeekly() throws Exception {
 		String expectedSecondPageOfSynopsis = "To be recorded\n17/10 4:15PM - 5:30PM, Weekly";
 
-		int recurrence = ManualRecording.Recurrence.WEEKLY;
+		ManualRecording.Recurrence recurrence = ManualRecording.Recurrence.WEEKLY;
 		createAndVerifyManualRecordingWithSpecifiedRecurrence(expectedSecondPageOfSynopsis, recurrence);
 	}
 
@@ -45,10 +48,18 @@ public class TestSynopsisStringForManualRecordings {
 		ManualRecording manualRecording = new ManualRecording(startTime, endTime, Rating.NONE, Status.RECORDING,
 				startTime, ManualRecording.Recurrence.ONCE);
 
-		SynopsisFormatter classUnderTest = new SynopsisFormatter(manualRecording);
+		// SynopsisFormatter classUnderTest = new
+		// SynopsisFormatter(manualRecording);
+		//
+		// Assert.assertEquals(expectedFirstPageOfSynopsis,
+		// classUnderTest.getFirstPageOfSynopsis());
+		// Assert.assertEquals(expectedSecondPageOfSynopsis,
+		// classUnderTest.getSecondPageOfSynopsis());
 
-		Assert.assertEquals(expectedFirstPageOfSynopsis, classUnderTest.getFirstPageOfSynopsis());
-		Assert.assertEquals(expectedSecondPageOfSynopsis, classUnderTest.getSecondPageOfSynopsis());
+		ManualRecordingSynopsisProducer classUnderTest = new ManualRecordingSynopsisProducer(manualRecording);
+
+		Assert.assertEquals(expectedFirstPageOfSynopsis, classUnderTest.getSynopsisFor(0));
+		Assert.assertEquals(expectedSecondPageOfSynopsis, classUnderTest.getSynopsisFor(1));
 	}
 
 	@Test
@@ -58,20 +69,20 @@ public class TestSynopsisStringForManualRecordings {
 		ManualRecording manualRecording = new ManualRecording(startTime, endTime, Rating.NONE, Status.RECORDED,
 				startTime, ManualRecording.Recurrence.ONCE);
 
-		SynopsisFormatter classUnderTest = new SynopsisFormatter(manualRecording);
+		ManualRecordingSynopsisProducer classUnderTest = new ManualRecordingSynopsisProducer(manualRecording);
 
-		Assert.assertEquals(expectedFirstPageOfSynopsis, classUnderTest.getFirstPageOfSynopsis());
-		Assert.assertEquals(expectedSecondPageOfSynopsis, classUnderTest.getSecondPageOfSynopsis());
+		Assert.assertEquals(expectedFirstPageOfSynopsis, classUnderTest.getSynopsisFor(0));
+		Assert.assertEquals(expectedSecondPageOfSynopsis, classUnderTest.getSynopsisFor(1));
 	}
 
 	private void createAndVerifyManualRecordingWithSpecifiedRecurrence(String expectedSecondPageOfSynopsis,
-                                                                       int recurrence) throws Exception {
+			ManualRecording.Recurrence recurrence) throws Exception {
 		ManualRecording manualRecording = new ManualRecording(startTime, endTime, Rating.NONE, Status.BOOKED,
 				new GregorianCalendar(), recurrence);
 
-		SynopsisFormatter classUnderTest = new SynopsisFormatter(manualRecording);
+		ManualRecordingSynopsisProducer classUnderTest = new ManualRecordingSynopsisProducer(manualRecording);
 
-		Assert.assertEquals(expectedFirstPageOfSynopsis, classUnderTest.getFirstPageOfSynopsis());
-		Assert.assertEquals(expectedSecondPageOfSynopsis, classUnderTest.getSecondPageOfSynopsis());
+		Assert.assertEquals(expectedFirstPageOfSynopsis, classUnderTest.getSynopsisFor(0));
+		Assert.assertEquals(expectedSecondPageOfSynopsis, classUnderTest.getSynopsisFor(1));
 	}
 }

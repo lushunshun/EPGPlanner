@@ -1,15 +1,14 @@
 package epgPlanner;
+
 import java.util.GregorianCalendar;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-import epgPlanner.Recording;
-import epgPlanner.SynopsisFormatter;
 import epgPlanner.Recording.Rating;
 import epgPlanner.Recording.Status;
-import epgPlanner.ScheduledRecording;
+import epgPlanner.synopsis.ScheduledRecordingSynopsisProducer;
 
 public class TestSynopsisStringForRecordedMovies {
 
@@ -38,7 +37,7 @@ public class TestSynopsisStringForRecordedMovies {
 		testSynopsisForRecordedMovie(Rating.ADULT, "18");
 	}
 
-	private void testSynopsisForRecordedMovie(int rating, String expectedRating) {
+	private void testSynopsisForRecordedMovie(Recording.Rating rating, String expectedRating) {
 
 		String title = "Prometheus";
 		String summary = "A team of scientists visiting an alien world become locked in a battle to save the human race";
@@ -50,13 +49,13 @@ public class TestSynopsisStringForRecordedMovies {
 		String expectedFirstPageOfScheduledRecordingSynopsis = title + " " + expectedRating + "\n" + summary;
 		String expectedSecondPageOfScheduledRecordingSynopsis = "Recorded: 6:00PM Wed 17/10/12 (120mins)";
 
-		Recording scheduledRecording = new ScheduledRecording(title, summary, durationInSeconds, rating, status,
-				isSeriesLinked, dateOfRecording);
+		ScheduledRecording scheduledRecording = new ScheduledRecording(title, summary, durationInSeconds, rating,
+				status, isSeriesLinked, dateOfRecording);
 
-		SynopsisFormatter classUnderTest = new SynopsisFormatter(scheduledRecording);
+		ScheduledRecordingSynopsisProducer classUnderTest = new ScheduledRecordingSynopsisProducer(scheduledRecording);
 
-		Assert.assertEquals(expectedFirstPageOfScheduledRecordingSynopsis, classUnderTest.getFirstPageOfSynopsis());
-		Assert.assertEquals(expectedSecondPageOfScheduledRecordingSynopsis, classUnderTest.getSecondPageOfSynopsis());
+		Assert.assertEquals(expectedFirstPageOfScheduledRecordingSynopsis, classUnderTest.getSynopsisFor(0));
+		Assert.assertEquals(expectedSecondPageOfScheduledRecordingSynopsis, classUnderTest.getSynopsisFor(1));
 	}
 
 }

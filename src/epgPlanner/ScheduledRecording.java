@@ -6,14 +6,14 @@ public class ScheduledRecording extends Recording {
 
 	private final boolean isSeriesLinkable;
 
-	public ScheduledRecording(String programmeTitle, String summary, int durationInSeconds, int rating,
+	public ScheduledRecording(String programmeTitle, String summary, int durationInSeconds, Rating rating,
 			Status status, boolean isSeriesLinkable, Calendar dateOfRecording) {
 
 		super(programmeTitle, summary, durationInSeconds, rating, status, dateOfRecording);
 		this.isSeriesLinkable = isSeriesLinkable;
 	}
 
-    public boolean isSeriesLinkable() {
+	public boolean isSeriesLinkable() {
 		return isSeriesLinkable;
 	}
 }

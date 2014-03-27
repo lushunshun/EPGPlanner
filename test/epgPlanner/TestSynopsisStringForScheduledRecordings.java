@@ -1,4 +1,5 @@
 package epgPlanner;
+
 import java.util.GregorianCalendar;
 
 import junit.framework.Assert;
@@ -7,17 +8,18 @@ import org.junit.Test;
 
 import epgPlanner.Recording.Rating;
 import epgPlanner.Recording.Status;
+import epgPlanner.synopsis.ScheduledRecordingSynopsisProducer;
 
 public class TestSynopsisStringForScheduledRecordings {
 
-    private static final String TITLE = "News at One";
-    private static final String SUMMARY = "The latest national and international news stories";
+	private static final String TITLE = "News at One";
+	private static final String SUMMARY = "The latest national and international news stories";
 
-    @Test
+	@Test
 	public void testSynopsisForProgrammeWhichHasBeenRecorded() throws Exception {
-        Status status = Status.RECORDED;
+		Status status = Status.RECORDED;
 
-		Recording scheduledRecording = createScheduledRecording(status);
+		ScheduledRecording scheduledRecording = createScheduledRecording(status);
 
 		String expectedSecondPageOfScheduledRecordingSynopsis = "Recorded: " + "1:00PM Tue 16/10/12 (24mins)";
 
@@ -29,17 +31,16 @@ public class TestSynopsisStringForScheduledRecordings {
 	public void testSynopsisForProgrammeWhichIsCurrentlyRecording() throws Exception {
 		Status status = Status.RECORDING;
 
-		Recording scheduledRecording = createScheduledRecording(status);
+		ScheduledRecording scheduledRecording = createScheduledRecording(status);
 
-		verifyExpectedSynopsis(createFirstPageOfSynopsisForScheduledRecording(), "Recording",
-				scheduledRecording);
+		verifyExpectedSynopsis(createFirstPageOfSynopsisForScheduledRecording(), "Recording", scheduledRecording);
 	}
 
 	@Test
 	public void testSynopsisForProgrammeToBeRecorded() throws Exception {
 		Status status = Status.BOOKED;
 
-		Recording scheduledRecording = createScheduledRecording(status);
+		ScheduledRecording scheduledRecording = createScheduledRecording(status);
 
 		String expectedSecondPageOfScheduledRecordingSynopsis = "To be recorded";
 
@@ -49,25 +50,25 @@ public class TestSynopsisStringForScheduledRecordings {
 	}
 
 	private void verifyExpectedSynopsis(String expectedFirstPageOfScheduledRecordingSynopsis,
-			String expectedSecondPageOfScheduledRecordingSynopsis, Recording recording) {
+			String expectedSecondPageOfScheduledRecordingSynopsis, ScheduledRecording recording) {
 
-		SynopsisFormatter classUnderTest = new SynopsisFormatter(recording);
+		ScheduledRecordingSynopsisProducer classUnderTest = new ScheduledRecordingSynopsisProducer(recording);
 
-		Assert.assertEquals(expectedFirstPageOfScheduledRecordingSynopsis, classUnderTest.getFirstPageOfSynopsis());
-		Assert.assertEquals(expectedSecondPageOfScheduledRecordingSynopsis, classUnderTest.getSecondPageOfSynopsis());
+		Assert.assertEquals(expectedFirstPageOfScheduledRecordingSynopsis, classUnderTest.getSynopsisFor(0));
+		Assert.assertEquals(expectedSecondPageOfScheduledRecordingSynopsis, classUnderTest.getSynopsisFor(1));
 	}
 
 	private String createFirstPageOfSynopsisForScheduledRecording() {
 		return TITLE + "\n" + SUMMARY + " [S]";
 	}
 
-	private Recording createScheduledRecording(Status status) {
-		int rating = Rating.NONE;
+	private ScheduledRecording createScheduledRecording(Status status) {
+		Rating rating = Rating.NONE;
 		int durationInSeconds = 1440;
 		GregorianCalendar dateOfRecording = new GregorianCalendar(2012, 9, 16, 13, 0);
 		boolean isSeriesLinked = true;
 
-        return new ScheduledRecording(TITLE, SUMMARY, durationInSeconds, rating, status,
-                isSeriesLinked, dateOfRecording);
+		return new ScheduledRecording(TITLE, SUMMARY, durationInSeconds, rating, status, isSeriesLinked,
+				dateOfRecording);
 	}
 }
