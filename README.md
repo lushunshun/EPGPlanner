@@ -9,7 +9,6 @@ Most of the refactoring is done to the "formatter" classes. "SynopsisFormatter" 
 Basically the formatting logic has been restructured into the following two main components:
 
 1. "SynopsisProducer" classes which are specified by interface "SynopsisProducer". These are the main classes that are used to produce recording synopses. 
-
 It's responsible to define how synopses of a recording should be organized (but not now it should be formatted). The reason that it's defined is because the original formatter class ("SynopsisFormatter") is quite rigid in terms of representing the model of the synopses. It is now possible to have different number of pages of synopses and they are not necessarily been models as "pages", for example, synopsis could be modeled into "screens" depends on the device on which the synopsis is viewed. Each instance of "producer" class is given a "formatter" class (described next) to actually generate the synopsis.
 
 2. "SynopsisFormatter" which are represented by "ManualRecordingSynopsisFormattingHelper" and "ScheduledRecordingSynopsisFormattingHelper" classes respectively. These classes are responsible to generate the synopsis texts and they are currently tightly coupled with the actual recording types since each type of recording requires different format for synopses.
