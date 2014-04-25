@@ -18,16 +18,14 @@ public abstract class RevertableSynopsisProducer<E> implements SynopsisProducer<
 
 	@Override
 	public E getSynopsisFor(int index) {
-		int positiveIndex = index;
-		// work out the real page number if it starts backward
-		if (index < 0) {
-			positiveIndex = this.synopses.size() + index;
+		//make sure the index falls into the size of synopses.
+		int offset = index % this.synopses.size();
+		
+		// work out the offset if it counts backward
+		if (offset < 0) {
+			offset += this.synopses.size();
 		}
 
-		if (positiveIndex >= this.synopses.size()) {
-			return null;
-		}
-
-		return this.synopses.get(positiveIndex);
+		return this.synopses.get(offset);
 	}
 }
